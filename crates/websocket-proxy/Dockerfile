@@ -1,3 +1,4 @@
+FROM busybox AS busybox
 FROM rust:1.85 AS builder
 
 WORKDIR /app
@@ -14,5 +15,7 @@ WORKDIR /app
 
 ARG BINARY="flashblocks-websocket-proxy"
 COPY --from=builder /app/target/release/${BINARY} /usr/local/bin/
+COPY --from=busybox /bin/wget /bin/wget
+COPY --from=busybox /bin/busybox /bin/sh
 
 ENTRYPOINT ["/usr/local/bin/flashblocks-websocket-proxy"]
